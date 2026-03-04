@@ -7,6 +7,9 @@
     </head>
     <body>
         <h1>問い合わせチャットボット</h1>
+            {% for row in conversation_history %}
+                <p>{{row["role"]}}：</p> <p>{{row["content"]}}</p>
+            {% endfor %}
         <form action="/chat" method="POST">
             <label >
                 ユーザー：
