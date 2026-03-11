@@ -10,11 +10,19 @@
             {% for row in conversation_history %}
                 <p>{{row["role"]}}：</p> <p>{{row["content"]}}</p>
             {% endfor %}
-        <form action="/chat" method="POST">
+
+        <button onclick = "select_option('募集職種について')">募集職種について</button>
+        <button onclick = "select_option('給与について')">給与について</button>
+        <button onclick="select_option('勤務地について')">勤務地について</button>
+
+
+        <form action="/chat" method="POST" id="chat_form">
             <label >
                 ユーザー：
-                <input type="text" name="user_questions" required>
+                <input type="text" name="user_questions" id="user_questions" required>
             </label>
+            <button type="submit">送信</button>
         </form>
+        <script src="{{ url_for('static', filename='chat.js') }}"></script>
     </body>
 </html>

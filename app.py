@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
 
-    return render_template("chat.html")
+    return render_template("chat.html",conversation_history=chat.conversation_history)
 
 # ユーザーの質問に関する回答を取得する
 @app.route("/chat",methods=["POST"])

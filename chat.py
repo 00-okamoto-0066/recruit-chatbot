@@ -6,7 +6,9 @@ import os
 import database
 
 # 会話履歴
-conversation_history = []
+conversation_history = [
+    {"role": "assistant", "content": "ようこそ、どのようなことを知りたいか、選択してください！"}
+]
 
 def chat(user_questions):
     # .envファイルを読み込む
