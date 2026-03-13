@@ -40,8 +40,6 @@ system_prompt = f"""\
 {job_info}
 """
 
-# やりとりの回数をカウント
-count = 0
 
 def chat(user_questions):
     # .envファイルを読み込む
@@ -63,36 +61,50 @@ def chat(user_questions):
 
 
 
-    # キーワードがユーザーの入力に含まれているか確認
-    is_keyword = any(word in user_questions for words in KEYWORDS for word in words)
-    
+    # ユーザーの入力と一致したキーワードを取り出す
+    matched_word = None
+    for words in KEYWORDS:
+        for word in words:
+            if word in user_input:
+                matched_word = word
+                break
+            
+            
+    # やり取りが多い場合はDBの定型文を返す
     if len(conversation_history) >= 12:
+        
+        # 連投した場合の定型文を取得する
+        matched_word = "連投"
+        response = database.get_template(matched_word)
         
         # Claudeの返答も履歴に追加 
         conversation_history.append({
             "role":"assistant",
-            "content":"会社の問い合わせフォームから直接ご連絡ください"
+            "content":response
         })
         # Claudeの返答をデータベースに保存をする
-        database.save_message("assistant","会社の問い合わせフォームから直接ご連絡ください")
+        database.save_message("assistant",response)
         
         return conversation_history
 
         
     # キーワードが含まれている場合はDBの定型文を返す
-    elif is_keyword:
+    elif matched_word:
+        
+        response = database.get_template(matched_word)
         
         # Claudeの返答も履歴に追加 
         conversation_history.append({
             "role":"assistant",
-            "content":"定型文を送ります。"
+            "content":response
         })
         # Claudeの返答をデータベースに保存をする
-        database.save_message("assistant","定型文を送ります。")
+        database.save_message("assistant",response)
         
         return conversation_history
         
         
+    # キーワードが含まれていない場合はAPIと募集内容のtxtを使って回答を作成する  
     else:
         
         # Claudeに質問を送って1文字ずつ表示する

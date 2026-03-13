@@ -3,6 +3,22 @@ import sqlite3
 
 DB_FILE = "chat_history.db"
 
+# 定型文を取得する
+def get_template(matched_word):
+
+    con = sqlite3.connect(DB_FILE)
+    cur = con.cursor()
+    cur.execute( 
+        "SELECT content FROM template WHERE keyword LIKE ? ",
+        (f"%{matched_word}%",)
+    )
+    # 1件だけデータを取得
+    result = cur.fetchone()
+    response = result[0] 
+    
+    return response
+    
+
 # 会話をデータベースに保存をする（現在は未使用・将来的な履歴保存用）
 def save_message(role,content):
     con = sqlite3.connect(DB_FILE)
