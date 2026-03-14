@@ -1,0 +1,276 @@
+/* ================================
+   全体のリセット・基本設定
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    /* paddingを足した分だけ中身を自動で縮めて、widthのサイズを守る */
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/* ================================
+   左右分割の親コンテナ
+================================ */
+#wrapper {
+    display: flex;          /* 左右に並べる */
+    height: 100vh;          /* 画面の高さいっぱい */
+}
+
+
+/* ================================
+   ホームエリア（左側）
+================================ */
+
+
+#home-area {
+    flex: 1;                   /* 残りの幅を全部使う */
+    padding: 40px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;    /* 縦並び */
+    justify-content: center;   /* 縦方向の中央に配置 */
+    align-items: center;       /* 横方向の中央に配置 */
+    text-align: center;        /* テキストを中央揃え */
+    position: relative;        /* 吹き出しの基準点にする */
+}
+
+/* 会社名 */
+#company-name {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+/* キャッチコピー */
+#catch-copy {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* チャットへ誘導する吹き出し */
+#chat-bubble {
+    background-color: #e8f4ff;
+    border: 1px solid #b0d4f1;
+    border-radius: 12px 12px 2px 12px;
+    padding: 16px 20px;
+    max-width: 300px;
+    cursor: pointer;        /* クリックできることを示す */
+    transition: background-color 0.2s; /* ホバー時のアニメーション */
+    position: absolute;        /* 親要素を基準に配置 */
+    bottom: 24px;              /* 下から24pxの位置 */
+    right: 24px;               /* 右から24pxの位置 */
+}
+
+/* 吹き出しにマウスが乗ったとき */
+#chat-bubble:hover {
+    background-color: #d0eaff;
+}
+
+#chat-bubble p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+/* ================================
+   チャットパネル（右側）
+   最初は非表示にしておく
+================================ */
+#chat-panel {
+    width: 50%;             /* 画面の半分 */
+    display: none;          /* 最初は非表示 */
+    flex-direction: column;
+    border-left: 1px solid #ddd;
+    background-color: #fff;
+}
+
+/* チャットパネルが開いたとき（chat.jsで切り替える） */
+#chat-panel.open {
+    display: flex;          /* openクラスがついたら表示 */
+}
+
+
+/* ================================
+   チャットパネルのヘッダー
+================================ */
+#chat-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #185FA5;
+    color: white;
+}
+
+#chat-panel-header span {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* 閉じるボタン */
+#close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#close-btn:hover {
+    opacity: 0.7;
+}
+
+
+/* ================================
+   会話履歴エリア
+================================ */
+#chat-history {
+    flex: 1;                /* 残りの高さを全部使う */
+    padding: 16px;
+    overflow-y: auto;       /* 会話が増えたらスクロール */
+    background-color: #dfe8f0;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+
+/* ================================
+   クイック選択ボタンエリア
+================================ */
+#quick-buttons {
+    padding: 10px 16px;
+    display: flex;
+    flex-wrap: wrap;        /* ボタンが多くても折り返す */
+    gap: 8px;               /* ボタン同士の間隔 */
+    border-top: 1px solid #ddd;
+}
+
+#quick-buttons button {
+    padding: 6px 12px;
+    font-size: 12px;
+    background-color: #e8f4ff;
+    border: 1px solid #b0d4f1;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+#quick-buttons button:hover {
+    background-color: #d0eaff;
+}
+
+
+/* ================================
+   メッセージ入力フォーム
+================================ */
+#chat_form {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-top: 1px solid #ddd;
+    gap: 8px;
+}
+
+#chat_form label {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 8px;
+    font-size: 13px;
+}
+
+#user_questions {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 13px;
+    outline: none;
+}
+
+#user_questions:focus {
+    border-color: #185FA5;
+}
+
+#chat_form button[type="submit"] {
+    padding: 8px 16px;
+    background-color: #185FA5;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#chat_form button[type="submit"]:hover {
+    background-color: #0f4a8a;
+}
+
+
+/* メッセージの行（ボット・ユーザー共通） */
+.message-row {
+    display: flex;               /* アイコンとメッセージを横並び */
+    margin-bottom: 16px;         /* メッセージ同士の間隔 */
+}
+
+/* ボットのメッセージ行（左寄せ） */
+.message-row.bot {
+    justify-content: flex-start; /* 左に寄せる */
+    align-items: flex-start;       /* アイコンとバブルを上揃えにする */
+    gap: 8px;                    /* アイコンとバブルの間隔 */
+}
+
+/* ユーザーのメッセージ行（右寄せ） */
+.message-row.user {
+    justify-content: flex-end;   
+}
+
+
+/*ボットのアイコン*/
+.bot-icon {
+    width: 36px;                 
+    height: 36px;                
+    border-radius: 50%;          
+    background-color: #185FA5;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;             /* アイコンの絵文字サイズ */
+    flex-shrink: 0;              /* アイコンが縮まないようにする */
+}
+
+
+
+/* メッセージの吹き出し（共通） */
+.message-bubble {
+    padding: 10px 14px;
+    font-size: 13px;
+    width: fit-content;          /* message-contentの幅いっぱい使う */
+    max-width: 100%;
+    line-height: 1.8;            /* 行間を広げる */
+    word-break: break-word;      /* 長い文字を折り返す */
+}
+
+
+/* ボットの吹き出し（白・左向き） */
+.bot-bubble {
+    background-color: white;
+    border-radius: 4px 12px 12px 12px; 
+    color: #333;
+}
+
+/* ユーザーの吹き出し（緑・右向き） */
+.user-bubble {
+    background-color: #4CAF50;
+    border-radius: 12px 4px 12px 12px; 
+    color: white;                
+}

@@ -6,26 +6,84 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <h1>問い合わせチャットボット</h1>
-            {% for row in conversation_history %}
-                <p>{{row["role"]}}：</p> <p>{{row["content"]}}</p>
-            {% endfor %}
+        <!--  左右を並べる親コンテナ -->
+        <div id="wrapper">
 
-        <button onclick = "select_option('募集職種について')">募集職種について</button>
-        <button onclick = "select_option('仕事内容・業務詳細について')">仕事内容・業務詳細について</button>
-        <button onclick = "select_option('勤務地について')">勤務地について</button>
-        <button onclick="select_option('給与について')">給与について</button>
-        <button onclick="select_option('服装について')">服装について</button>
-        <button onclick="select_option('事業内容について')">事業内容について</button>
+            <!--  ホームエリア（左側） -->
+            <div id="home-area">
 
+                <!-- 会社名 -->
+                <h1 id="company-name">株式会社〇〇</h1>
 
-        <form action="/chat" method="POST" id="chat_form">
-            <label >
-                ユーザー：
-                <input type="text" name="user_questions" id="user_questions" required>
-            </label>
-            <button type="submit">送信</button>
-        </form>
+                <!-- キャッチコピー -->
+                <p id="catch-copy">AIがあなたの可能性を広げる。</p>
+
+                <!-- チャットへ誘導する吹き出し（クリックでチャットパネルが開く） -->
+                <div id="chat-bubble" onclick="openChatPanel()">
+                    <p>🤖 チャットボット</p>
+                    <p>募集内容を知りたい場合は<br>チャットボットが案内します。</p>
+                </div>
+            </div>
+            
+            <!--  チャットパネル（右側・最初は非表示） -->
+            <div id="chat-panel" {% if chat_open %}class="open"{% endif %}>
+
+                <!--  パネルのヘッダー（閉じるボタンつき） -->
+                <div id="chat-panel-header">
+                    <span>🤖 採用チャットボット</span>
+                    <button id="close-btn" onclick="closeChatPanel()">✕ 閉じる</button>
+                </div>
+
+                <!--  会話履歴の表示エリア(会話の履歴を受け取ってforループで展開) -->
+                <div id="chat-history">
+                    {% for row in conversation_history %}
+
+                        {% if row["role"] == "assistant" %}
+                            <!-- ボットのメッセージ（左側に表示） -->
+                            <div class="message-row bot">
+                                <div class="bot-icon">🤖</div>
+                                <!-- メッセージの吹き出し -->
+                                <div class="message-bubble bot-bubble">
+                                    {{ row["content"] }}
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <!-- ユーザーのメッセージ（右側に表示） -->
+                            <div class="message-row user">
+                                <!-- メッセージの吹き出し -->
+                                <div class="message-bubble user-bubble">
+                                    {{ row["content"] }}
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+
+                <!--  クイック選択ボタン（app.pyから受け取ったリストをforループで展開） -->
+                <div id="quick-buttons">
+                    {% for option in options %}
+                        <button onclick="select_option('{{ option }}')">{{ option }}</button>
+                    {% endfor %}
+                </div>
+
+                <!--  メッセージ入力フォーム -->
+                <form action="/chat" method="POST" id="chat_form">
+                    <label >
+                        ユーザー：
+                        <input type="text" name="user_questions" id="user_questions" required>
+                    </label>
+                    <button type="submit">送信</button>
+                </form>
+
+            </div>
+            <!-- chat-panel ここまで -->
+
+        </div>
+        <!-- wrapper ここまで -->
+
         <script src="{{ url_for('static', filename='chat.js') }}"></script>
     </body>
 </html>
